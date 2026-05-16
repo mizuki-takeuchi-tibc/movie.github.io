@@ -3,1075 +3,190 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>学生動画作成課題</title>
+    <title>学生動画課題 - イベント別一覧</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f5f5;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
-            color: #333;
         }
-
+        
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
-            background: white;
+            background-color: #fff;
+            padding: 40px;
             border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
-
+        
         h1 {
-            text-align: center;
-            margin-bottom: 30px;
             color: #2c3e50;
-            font-size: 28px;
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 10px;
+            font-weight: 700;
         }
-
-        .class-section {
+        
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 16px;
             margin-bottom: 40px;
         }
-
-        .class-title {
-            background-color: #3498db;
+        
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .event-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
+            padding: 25px;
             color: white;
-            padding: 12px 20px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-        }
-
-        thead {
-            background-color: #34495e;
-            color: white;
-        }
-
-        th {
-            padding: 12px 15px;
-            text-align: left;
-            font-weight: 600;
-            border: 1px solid #bdc3c7;
-        }
-
-        td {
-            padding: 12px 15px;
-            border: 1px solid #ecf0f1;
-            word-break: break-word;
-        }
-
-        tbody tr:nth-child(odd) {
-            background-color: #f9f9f9;
-        }
-
-        tbody tr:hover {
-            background-color: #f0f0f0;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .status-submitted {
-            background-color: #d5f4e6;
-            color: #27ae60;
-        }
-
-        .status-not-submitted {
-            background-color: #fadbd8;
-            color: #c0392b;
-        }
-
-        .status-private {
-            background-color: #fef5e7;
-            color: #f39c12;
-        }
-
-        .status-issue {
-            background-color: #ebdef0;
-            color: #8e44ad;
-        }
-
-        a {
-            color: #3498db;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
             text-decoration: none;
-            word-break: break-all;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-
-        a:hover {
-            color: #2980b9;
-            text-decoration: underline;
+        
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
         }
-
-        .no-link {
-            color: #95a5a6;
-            font-style: italic;
+        
+        .event-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
-
-        /* レスポンシブ対応 */
-        @media (max-width: 768px) {
-            .container {
-                padding: 15px;
-            }
-
-            h1 {
-                font-size: 22px;
-            }
-
-            table {
-                font-size: 14px;
-            }
-
-            th, td {
-                padding: 8px 10px;
-            }
-
-            .student-name {
-                max-width: 200px;
-            }
+        
+        .event-description {
+            font-size: 14px;
+            opacity: 0.95;
+            line-height: 1.6;
+            margin-bottom: 15px;
         }
-                .requirements-section {
+        
+        .event-link-button {
+            background-color: rgba(255, 255, 255, 0.25);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .event-link-button:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        
+        .info-section {
             background-color: #ecf0f1;
             border-left: 4px solid #3498db;
             padding: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             border-radius: 4px;
         }
-
-        .requirements-section h2 {
+        
+        .info-section h2 {
             color: #2c3e50;
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
-
-        .requirements-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        .requirements-list li {
-            padding: 10px 0;
-            padding-left: 30px;
-            position: relative;
-            font-size: 16px;
-            line-height: 1.6;
-            color: #34495e;
-        }
-
-        .requirements-list li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #27ae60;
-            font-weight: bold;
             font-size: 18px;
+            margin-bottom: 10px;
         }
-
+        
+        .info-section p {
+            color: #34495e;
+            line-height: 1.6;
+        }
+        
+        .coming-soon {
+            background-color: #ecf0f1;
+            border-left: 4px solid #95a5a6;
+            padding: 20px;
+            border-radius: 4px;
+            text-align: center;
+            color: #7f8c8d;
+        }
+        
+        .coming-soon h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            .events-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>📹 学生動画作成課題</h1>
-               <!-- 課題要件セクション -->
-        <div class="requirements-section">
-            <h2>📋 今回のGW動画作成課題の要件</h2>
-            <ul class="requirements-list">
+        <h1>📹 学生動画課題ポータル</h1>
+        <p class="subtitle">学校イベントの動画投稿一覧</p>
+        
+        <div class="info-section">
+            <h2>📌 このページについて</h2>
+            <p>学校で実施されるイベントの動画作成課題を通じて、学生の創造性と表現力を育成しています。各イベントごとに、学生たちが作成・投稿した動画一覧をご確認いただけます。</p>
+        </div>
+        
+        <div class="events-grid">
+            <!-- GW 2024 -->
+            <div class="event-card">
+                <div>
+                    <div class="event-title">🌸 GW 2024</div>
+                    <div class="event-description">ゴールデンウィークの過ごし方を動画で紹介</div>
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <a href="https://mizuki-takeuchi-tibc.github.io/movie.github.io/tibcgw01.html" class="event-link-button">1年生</a>
+                    <a href="https://mizuki-takeuchi-tibc.github.io/movie.github.io/tibcgw02.html" class="event-link-button">2年生</a>
+                </div>
+            </div>
+            
+            <!-- 今後のイベント -->
+            <div class="coming-soon">
+                <h3>🎓 新しいイベント追加予定</h3>
+                <p>学校行事に応じて、随時新しい動画課題が追加されます</p>
+            </div>
+        </div>
+        
+        <div class="info-section">
+            <h2>📋 課題要件</h2>
+            <p style="margin-bottom: 10px;">各動画課題では、以下の要件を満たす必要があります：</p>
+            <ul style="margin-left: 20px; color: #34495e;">
                 <li>30秒以上の動画であること</li>
                 <li>文字を入れること</li>
                 <li>BGMを入れること</li>
-                <li>Youtube公開（限定公開でOK）すること</li>
+                <li>YouTube公開（限定公開でOK）すること</li>
             </ul>
         </div>
-
-        <!-- LJA-A -->
-        <div class="class-section">
-            <div class="class-title">LJA-A クラス</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>学籍番号</th>
-                        <th>学生名</th>
-                        <th>ステータス</th>
-                        <th>YouTubeリンク</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2604580001</td>
-                        <td>AMARBAYASGALAN NOMIN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/Mw4ESmx44i8?si=JrILCcCsn-F0Q_tE&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580004</td>
-                        <td>EI THET KHAING</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=Jn1e9UaZMOc&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580012</td>
-                        <td>VU THI THUY TRANG</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580013</td>
-                        <td>VU THI MAI ANH</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/g8-Qr2oME3M?feature=shared&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580017</td>
-                        <td>EAIN THU NWE</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/KA_YpD_gadc?si=oGviORD8cnPuERZp" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580022</td>
-                        <td>KAWSAR MD</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580023</td>
-                        <td>KASTHURI ARACHCHILLAGE...</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=Plk6GSzcV_Q&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580024</td>
-                        <td>KHIN SANDAR SOE</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/RKFC-M4sMN8?si=-A5VzFvpr2RPekhL" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580029</td>
-                        <td>NGUYEN NGOC PHI GIAO</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580030</td>
-                        <td>NGUYEN DAI HUU</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/2_QEw1vs2-4?si=XhYzEsqpy6vLsVYc&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580037</td>
-                        <td>NGUYEN THI THUY LINH</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/_3k5uGwA4nc?si=5vO9d6hrcFL3sqno&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580042</td>
-                        <td>NGUYEN PHUONG THAO</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/dW7IUphVsHI?si=u9BkkzJcL85hlsft&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580046</td>
-                        <td>GERELBAT BUYANKHISHIG</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/c5VG5mMHC70?si=95_DknD2qI5Ngs7K&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580049</td>
-                        <td>GOTAME MANISHA</td>
-                        <td><span class="status-badge status-private">動画非公開</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580050</td>
-                        <td>KHONG GIA HAN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/d-HcHEqah0I?feature=shared&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580053</td>
-                        <td>SAN THAWDAR HMUE</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/yLqg7hKaPAo?si=mH03eNVM1-zYjYuF&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580056</td>
-                        <td>ZIN ZIN ZAW</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/PYqiCCyPzKk?si=oVMEILaugM4j394x&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580065</td>
-                        <td>SUBEDY SUDARSHAN</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580066</td>
-                        <td>SHRESTHA ANISH BHUMIRATNA</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580072</td>
-                        <td>DAMAI SHANKAR BAHADUR</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/Y8W14FHns-I?si=dgKiiqyQHNRjrt1h&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580073</td>
-                        <td>TAMANG KARMA</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580074</td>
-                        <td>DANG NGOC HIEU</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/eH5hpBTRMDQ?si=XfLrBFSClamYND73&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580076</td>
-                        <td>TRAN XUAN LUC</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=HLPf7CRIKvw&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580078</td>
-                        <td>TRAN BINH DUONG</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580083</td>
-                        <td>DINH THIEN NGOC BAO TRAN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/TxEm7lsMIYI?si=s73DSJLJsaS61XY4&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580084</td>
-                        <td>THEINT THEINT ZAW</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/gbe9vgim14I?si=enHC0-EkYRn3AoG1&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580087</td>
-                        <td>THET MAR WIN</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580089</td>
-                        <td>TERBISH ARIUNZAYA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=YpWOMoXYObY&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580091</td>
-                        <td>DOAN THE ANH</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580098</td>
-                        <td>HASAN MD NAZMUL</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/IrtO8FyTvx4?si=zZYoRd8B7QMS1VWN&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580104</td>
-                        <td>BHANDARI BISHAL</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/8erzl3BgC-o?si=a7pBEZp81LDUrl9I&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580111</td>
-                        <td>PHAM HUY TOAN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/1HRjMCOJyEU?si=IXhNJVeD7XlMEyz3&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580119</td>
-                        <td>HUYNH THI TUONG THI</td>
-                        <td><span class="status-badge status-private">動画非公開</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580132</td>
-                        <td>RAHMAN NAIMUR</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=OAayfRLqfcY&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580134</td>
-                        <td>RANA MAGAR ZEROSH</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/XXFkrZQRXpI?si=iAGobPOIocp7t-70&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- LJA-B -->
-        <div class="class-section">
-            <div class="class-title">LJA-B クラス</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>学籍番号</th>
-                        <th>学生名</th>
-                        <th>ステータス</th>
-                        <th>YouTubeリンク</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2604580002</td>
-                        <td>AN QIER</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580020</td>
-                        <td>KAI NU</td>
-                        <td><span class="status-badge status-private">動画非公開</span></td>
-                        <td><a href="https://youtube.com/shorts/GSgNvH674EY?si=NGD2JB6t18ddk-Vj&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580028</td>
-                        <td>NGUYEN VAN NHUT</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/VrEcdg1G6eA?si=am1A5j8Qg7h70XVL&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580031</td>
-                        <td>NGUYEN TRUONG GIANG</td>
-                        <td><span class="status-badge status-issue">文字無し</span></td>
-                        <td><a href="https://youtube.com/shorts/Bv88GrYfxmM?feature=shared&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580032</td>
-                        <td>NGUYEN TRUNG TUNG</td>
-                        <td><span class="status-badge status-issue">文字無し</span></td>
-                        <td><a href="https://youtube.com/shorts/TO6HRbO_g5U?si=beJZvK99CHQXifgt&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580033</td>
-                        <td>NGUYEN THI VAN ANH</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/CRIihE3dh-k?feature=share&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580034</td>
-                        <td>NGUYEN THI NGOC ANH</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/XoK0362jNrA?si=5qAzY00I9EFvpIGS&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580038</td>
-                        <td>NGUYEN THI HA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/dOTXEnzlGW0?si=tTm8sMA1dazcmhxu&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580039</td>
-                        <td>NGUYEN THU HIEN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/CRNkCFkosgw?si=ZfA2isMW75PqjW-N&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580043</td>
-                        <td>NGUYEN MINH TOAN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/PAvLVSQp37s?si=BoOV-kWKwGH5pSg8" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580047</td>
-                        <td>GAO WEI</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=fwqdl5xdIcU&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580055</td>
-                        <td>JOY MD AL MAMON</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/vhEVBG3v_sk?si=YwkP6E3zsciCkcVn" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580058</td>
-                        <td>SHIN MOE NGE</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/bUuNvPwXuY0?si=aaBsBbsKv8OR1gy6&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580063</td>
-                        <td>SU YI THIN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/bB_vZE6nzUk?si=0DCCk9tfLPm6UXdL&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580069</td>
-                        <td>DAO XUAN VU</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/nTYyaJ0_flM?si=IQtrYY_XxjtoiI6q&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580070</td>
-                        <td>THAPA KAMALA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/IcVBa78fpz0?si=zgbeWA6IKmGJyP83&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580082</td>
-                        <td>TSOGTJARGAL KHASH ERDENE</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580088</td>
-                        <td>HTET YAN AUNG</td>
-                        <td><span class="status-badge status-issue">文字無し</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=aCAx0vnM6_s&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580090</td>
-                        <td>DO THAO NGUYEN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/7esB2J6Zv1Y?si=-uW1RjcndWnKLccu&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580093</td>
-                        <td>THOON NADI</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=IlK-Ol4dJIE&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580095</td>
-                        <td>HNIN MOE</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=feDRDKUEQHY&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580101</td>
-                        <td>BHATTA SHRAWAN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/5Sx38LV_T0M?si=ckJhmnQ-uMJ_qg6j&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580102</td>
-                        <td>BALJID UYANGA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/xwDHK84xHHc?si=_ymZYHQS1qeoJKrc&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580106</td>
-                        <td>KHISHIGBAYAR BUDOCHIR</td>
-                        <td><span class="status-badge status-private">動画非公開</span></td>
-                        <td><a href="https://youtube.com/@budkkaakh?si=0DTvjX_569CjM-46&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580109</td>
-                        <td>PHAM THI XUAN NGHI</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=y1LmIaMldBY&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580110</td>
-                        <td>PHAM THE LINH</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580117</td>
-                        <td>HUYNH THANH THAO</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/qZ0dqOmvvzI?si=t2vHv9bLY2AlvGvU&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580118</td>
-                        <td>HUYNH THANH HANG</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=Xqabg3qliEQ&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580120</td>
-                        <td>HUYNH NHU TUYET NGOC</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/_9_YaZezeRs?si=8b1LSTzhifgoRQcf&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580122</td>
-                        <td>HOANG VAN TRIEU</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/p4EGWPFP8A0?si=RJAVeaKF8u7IulH3&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580124</td>
-                        <td>MIA MD MOHASIN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtu.be/qMqj5ADVmrU?si=J0Fgje2Az7fHlWiY" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580127</td>
-                        <td>MIN MYAT ZIN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/Y8lryPucx-Q?si=TicsM-aYWXjF707r&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580128</td>
-                        <td>MAY PAING PAING PHYO</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/CPat95U2zFE?si=GTTYFFUXxD5NGO5z&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580130</td>
-                        <td>YOON THET PAN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=9J1vr6nqzvo&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580131</td>
-                        <td>YONJAN TAMANG KRISHNA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/eOZNVC-mI5U?si=IRwXcW18nFzbUmqX&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580133</td>
-                        <td>HLAING WUTT HMONE OO</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/A4IrcH2Yxyg?si=rOcl8Qpbr8K9qglL&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580096</td>
-                        <td>NWAY EAIN ZAW</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/7OqW2qfd9FA?si=3g6acDDCxegC1xno" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- LJP-A -->
-        <div class="class-section">
-            <div class="class-title">LJP-A クラス</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>学籍番号</th>
-                        <th>学生名</th>
-                        <th>ステータス</th>
-                        <th>YouTubeリンク</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2604580003</td>
-                        <td>EI EI THAW</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/@eieitaw-k5h?si=7Uk3ZYWptHQDut-Q&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580007</td>
-                        <td>VU THI DIEM QUYNH</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/_ZoOW7dx6s8?si=57p8ZFXAsNrMWgOk&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580008</td>
-                        <td>VU DUC LONG</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/hGqEmAhLMEQ?si=jO3_cq-Jd_0vG0gE&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580015</td>
-                        <td>WAI WAI HNIN</td>
-                        <td><span class="status-badge status-private">動画非公開</span></td>
-                        <td><a href="https://youtube.com/shorts/H7qQpQ2kTX4?si=fQOcOip0O2dRY-J8&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580018</td>
-                        <td>AYE MYO HLAING</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/yJkMOcrHZz0?si=GgIrNkZvFFzK6pzW&authuser=1" target="_blank">youtubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580025</td>
-                        <td>KHIN YADANAR TUN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/SvvoZGCBVSk?si=LVybrspWR3FB0Xdt&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580026</td>
-                        <td>NGUYEN VAN KHOA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/92Xpp4RBb1M?si=Bbagc-VW2z7GdOme&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580027</td>
-                        <td>NGUYEN VAN TIEP</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580036</td>
-                        <td>NGUYEN THI THANH MAI</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/Y6_SKhw9puY?si=ot_kAzcLkqUz0SEg&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580041</td>
-                        <td>NGUYEN PHUONG ANH</td>
-                        <td><span class="status-badge status-issue">秒数足りない</span></td>
-                        <td><a href="https://youtube.com/shorts/1Om8Y9GCaHw?si=_Urv1iblbzJMZfGV&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580045</td>
-                        <td>NGUYEN LE THANH DAT</td>
-                        <td><span class="status-badge status-issue">文字無し</span></td>
-                        <td><a href="https://youtube.com/shorts/GE0TBJ03xsE?si=PwCGkcxMKlW614Xl&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580048</td>
-                        <td>KOSEN ANDIN LEHNA LESLIE</td>
-                        <td><span class="status-badge status-not-submitted">未提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580051</td>
-                        <td>SAH PAPU KUMAR</td>
-                        <td><span class="status-badge status-private">動画非公開</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580057</td>
-                        <td>ZIN MAR HTIKE</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=hQisMvLY8lg&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580059</td>
-                        <td>SU WUTT YEE THIN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=QvW6Hzmkvwg&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580060</td>
-                        <td>SU MYAT NOE</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/UDhAPAVGzJg?si=_AWf2aAtySNXtCuY&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580062</td>
-                        <td>SU LATT MON</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/BOqJuE84fPg?si=buNbW38HXek4sbxU&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580071</td>
-                        <td>THAPA MAGAR AASHA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtu.be/bQ8iusJAZno?si=k0tbCVN0OJoY8ekJ" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580075</td>
-                        <td>DANG THI THANH HOA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/hPP3TowIceA?si=71m4IyUh3RKL56fd&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580085</td>
-                        <td>THET HTAR SWE</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/ypCdmxSJBwc?si=bJuM6aK6n3vlF3iy&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580086</td>
-                        <td>HTET HTET KHAING</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/wrWLhigZITc?si=7WOChfrgDn74FPHv&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580094</td>
-                        <td>DONG NGUYEN QUOC DAT</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/fmENla6c3uo?feature=shared" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580097</td>
-                        <td>PAING HEIN KYAW</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/R1CcvXzwwDY?si=Pk_Ecifou2LeKFYD&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580103</td>
-                        <td>VAN BIAK HNEM</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/Hq-zLKEEEws?si=wNzhhSR2FxuCmgK4&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580105</td>
-                        <td>PYAE PHYO THANT</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/lvQzDW68mTk?si=tlk3-xijI3DGdJEr&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580107</td>
-                        <td>PHAM GIA KHIEM</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/mZge_OUFvdk?si=642wRjgga2KW_obe&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580112</td>
-                        <td>PHAM MINH NGHIA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/OVYeSyN0sQE?si=S3mO-xcWGkJiu_zp&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580114</td>
-                        <td>BUI THI TIEU VY</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/AuZelqzw1iE?si=_8ZK6n3vzfX81dbU&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580116</td>
-                        <td>BUI THIEU MINH</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/Gvj9YY9E5Fg?si=h3YqsrjChR20GgyO" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580123</td>
-                        <td>MI THU ZAR</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/lnJzM4ZZtPM?si=U0eY15anzDgYPt_x&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580125</td>
-                        <td>MI SANDAR AUNG</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=zz4qRpmgUuQ&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580126</td>
-                        <td>MYAT KO KO AUNG</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/jj28qkPmlt0?si=j9M8_rTtwDiJoo8Z" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580129</td>
-                        <td>MELLAWA MUDIYANSELAGE...</td>
-                        <td><span class="status-badge status-private">動画非公開</span></td>
-                        <td><a href="https://youtube.com/shorts/oBQidbfn5C4?feature=shared&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580135</td>
-                        <td>LI XINCAN</td>
-                        <td><span class="status-badge status-issue">文字無し</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=aMRHppnXb00&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580136</td>
-                        <td>LIU JIE</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/5dOY-8Y9bXg?si=WdFCymqTvOki22Ga&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580141</td>
-                        <td>HSU DARLI AYE</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/GgIxbrIfHWI?si=i8mB6qN8xlvUC2qD&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <!-- LJP-B -->
-        <div class="class-section">
-            <div class="class-title">LJP-B クラス</div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>学籍番号</th>
-                        <th>学生名</th>
-                        <th>ステータス</th>
-                        <th>YouTubeリンク</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>2604580005</td>
-                        <td>EI NGONE PHOO</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/yEqKwpV57Y4?si=XUb2dFgJDSnUZRTp&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580010</td>
-                        <td>WIN MIN HEIN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/Lpl1wajr6Hg?si=G4iDJhMYManV4mOC&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580014</td>
-                        <td>VU THU TRANG</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/nK59bf2_Pvc?si=pHgkm2tT9Bpy5dKl&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580016</td>
-                        <td>EAIN SI OO</td>
-                        <td><span class="status-badge status-issue">文字無し</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=mX4V5yYVuXg&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580019</td>
-                        <td>KUAI HAIPENG</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=M-RKp0v34S8&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580021</td>
-                        <td>KHAING ZIN NYEIN</td>
-                        <td><span class="status-badge status-issue">BGM無し</span></td>
-                        <td><a href="https://youtube.com/shorts/rZit-EcTt58?si=Lvwf5wadeifcMuO_&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580035</td>
-                        <td>NGUYEN THI THANH</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/6xJ6q42UMsM?si=SgEkQU6mPmSlGT5G&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580040</td>
-                        <td>NGUYEN PHU BAO</td>
-                        <td><span class="status-badge status-issue">文字無し</span></td>
-                        <td><a href="https://youtube.com/shorts/tbK-Vf9gqBg?si=WLGI_pVP-gc5xHAO&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580044</td>
-                        <td>NGUYEN MINH DUC</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/R4wBnACi1VM?si=ZDWu2B2vSOg2FcE1&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580052</td>
-                        <td>SAUD RAJIV</td>
-                        <td><span class="status-badge status-private">動画非公開</span></td>
-                        <td><a href="https://youtube.com/shorts/UVO0riewbe8?si=Yjc7AbsxY88ufxUB&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580054</td>
-                        <td>SHRESTHA JANUKA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/v8MISekqNm8?si=QXRFtHw_WoeUSLey&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580061</td>
-                        <td>SU MON AUNG</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/WARhjYp8hgk?si=BtG-x4WaB6bExU-_&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580064</td>
-                        <td>HSU WATI HTET</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/MJxQXYPUrlg?si=mnbGCTZf1LAPWFq_&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580068</td>
-                        <td>TA THI PHUONG</td>
-                        <td><span class="status-badge status-issue">文字無し</span></td>
-                        <td><a href="https://youtube.com/shorts/vmjMZ0t_5EU?si=_Em2IaM7GyLSeMrw" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580077</td>
-                        <td>TRAN CHI BAO</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/EwcBySsXoi8?si=KjfJ5Pk-eu8uAYmL&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580079</td>
-                        <td>CHANDARA SUBITA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/yVtv7IGMxiY?si=nZrgviHWVRXykVwp&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580080</td>
-                        <td>CHU THI HUYEN</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/SBZ8p6mvaYI?si=uKlR7NNnB8MBaPKE&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580081</td>
-                        <td>KYAW ZEYA</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/V1PTDwNPsqQ?si=LyNyUuv7gtQfSf2q" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580099</td>
-                        <td>BAJAGAIN BHAGAWATI</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/4tj79rXGkAw?si=aMsfSLWRRUcr3dC3" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580100</td>
-                        <td>BASNET BIKRAM</td>
-                        <td><span class="status-badge status-private">動画非公開</span></td>
-                        <td><a href="https://youtube.com/shorts/cP5n5b4i7WA?si=9BZOBXzMnP5jfsdR&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580113</td>
-                        <td>PHAN THI QUYNH TRAM</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtube.com/shorts/S4I0ixyx5WE?si=rPh9Fh2Eg-k2Wfrz&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580115</td>
-                        <td>BUI THI PHUONG TRANG</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://youtu.be/IM8Iyqri_Yo?si=8GQBhAJE08jvprHG" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580121</td>
-                        <td>HOANG THI TUYET NHUNG</td>
-                        <td><span class="status-badge status-issue">文字無し</span></td>
-                        <td><a href="https://youtube.com/shorts/OQXjrnDV3SE?si=wKB0weZz8QksUr0M&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580137</td>
-                        <td>LIU HAO</td>
-                        <td><span class="status-badge status-private">動画非公開</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                    <tr>
-                        <td>2604580138</td>
-                        <td>LE VAN QUOC VIET</td>
-                        <td><span class="status-badge status-submitted">提出済</span></td>
-                        <td><a href="https://www.youtube.com/watch?v=lLT-iOuQGBM&authuser=1" target="_blank">YouTubeを見る</a></td>
-                    </tr>
-                    <tr>
-                        <td>2604580139</td>
-                        <td>REBECCA VAN HNEM ZING</td>
-                        <td><span class="status-badge status-issue">要再提出</span></td>
-                        <td class="no-link">-</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
     </div>
 </body>
 </html>
