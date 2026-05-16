@@ -56,10 +56,6 @@
             color: white;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s, box-shadow 0.3s;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
         }
         
         .event-card:hover {
@@ -70,21 +66,22 @@
         .event-title {
             font-size: 22px;
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
         }
         
-        .event-description {
-            font-size: 14px;
-            opacity: 0.95;
-            line-height: 1.6;
-            margin-bottom: 15px;
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         
         .event-link-button {
+            flex: 1;
+            min-width: 120px;
             background-color: rgba(255, 255, 255, 0.25);
             border: 2px solid white;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 15px;
             border-radius: 4px;
             text-align: center;
             font-weight: 600;
@@ -144,6 +141,10 @@
             .events-grid {
                 grid-template-columns: 1fr;
             }
+            
+            .event-link-button {
+                flex: 1;
+            }
         }
     </style>
 </head>
@@ -158,13 +159,10 @@
         </div>
         
         <div class="events-grid">
-            <!-- GW 2024 -->
+            <!-- GW 2026 -->
             <div class="event-card">
-                <div>
-                    <div class="event-title">🌸 GW 2024</div>
-                    <div class="event-description">ゴールデンウィークの過ごし方を動画で紹介</div>
-                </div>
-                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <div class="event-title">🌸 GW 2026</div>
+                <div class="button-group">
                     <a href="https://mizuki-takeuchi-tibc.github.io/movie.github.io/tibcgw01.html" class="event-link-button">1年生</a>
                     <a href="https://mizuki-takeuchi-tibc.github.io/movie.github.io/tibcgw02.html" class="event-link-button">2年生</a>
                 </div>
@@ -175,17 +173,6 @@
                 <h3>🎓 新しいイベント追加予定</h3>
                 <p>学校行事に応じて、随時新しい動画課題が追加されます</p>
             </div>
-        </div>
-        
-        <div class="info-section">
-            <h2>📋 課題要件</h2>
-            <p style="margin-bottom: 10px;">各動画課題では、以下の要件を満たす必要があります：</p>
-            <ul style="margin-left: 20px; color: #34495e;">
-                <li>30秒以上の動画であること</li>
-                <li>文字を入れること</li>
-                <li>BGMを入れること</li>
-                <li>YouTube公開（限定公開でOK）すること</li>
-            </ul>
         </div>
     </div>
 </body>
