@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生動画作成課題</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2c3e50;
+            font-size: 28px;
+        }
+
+        .class-section {
+            margin-bottom: 40px;
+        }
+
+        .class-title {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        thead {
+            background-color: #34495e;
+            color: white;
+        }
+
+        th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            border: 1px solid #bdc3c7;
+        }
+
+        td {
+            padding: 12px 15px;
+            border: 1px solid #ecf0f1;
+            word-break: break-word;
+        }
+
+        tbody tr:nth-child(odd) {
+            background-color: #f9f9f9;
+        }
+
+        tbody tr:hover {
+            background-color: #f0f0f0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .status-submitted {
+            background-color: #d5f4e6;
+            color: #27ae60;
+        }
+
+        .status-not-submitted {
+            background-color: #fadbd8;
+            color: #c0392b;
+        }
+
+        .status-private {
+            background-color: #fef5e7;
+            color: #f39c12;
+        }
+
+        .status-issue {
+            background-color: #ebdef0;
+            color: #8e44ad;
+        }
+
+        a {
+            color: #3498db;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        a:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+        .no-link {
+            color: #95a5a6;
+            font-style: italic;
+        }
+
+        .like-cell {
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .like-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px 10px;
+            transition: transform 0.2s;
+        }
+
+        .like-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .like-btn.liked {
+            animation: likeAnimation 0.3s ease-in-out;
+        }
+
+        .like-count {
+            margin-left: 8px;
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 14px;
+        }
+
+        @keyframes likeAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        .requirements-section {
+            background-color: #ecf0f1;
+            border-left: 4px solid #3498db;
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 4px;
+        }
+
+        .requirements-section h2 {
+            color: #2c3e50;
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+
+        .requirements-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .requirements-list li {
+            padding: 10px 0;
+            padding-left: 30px;
+            position: relative;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #34495e;
+        }
+
+        .requirements-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .reset-button {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 2px solid #bdc3c7;
+        }
+
+        .reset-button button {
+            padding: 10px 20px;
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .reset-button button:hover {
+            background-color: #c0392b;
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+
+            table {
+                font-size: 14px;
+            }
+
+            th, td {
+                padding: 8px 10px;
+            }
+
+            .student-name {
+                max-width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📹 学生動画作成課題 - 2年生</h1>
+        
+        <!-- 課題要件セクション -->
+        <div class="requirements-section">
+            <h2>📋 動画作成課題の要件</h2>
+            <ul class="requirements-list">
+                <li>30秒以上の動画であること</li>
+                <li>文字を入れること</li>
+                <li>BGMを入れること</li>
+                <li>Youtube公開（限定公開でOK）すること</li>
+            </ul>
+        </div>
+
+        <!-- LSA-A -->
+        <div class="class-section">
+            <div class="class-title">LSA-A クラス</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>学籍番号</th>
+                        <th>学生名</th>
+                        <th>ステータス</th>
+                        <th>YouTubeリンク</th>
+                        <th>いいね</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2504580005</td>
+                        <td>ABDIRAUBOV MUKHAMMADKODIR BAKHRIDDIN UGLI</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580005">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580007</td>
+                        <td>YIGITALIEV BOBURMIRZO TOSHTILLA UGLI</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580007">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580008</td>
+                        <td>YIN EI KHAING MYO</td>
+                        <td><span class="status-badge status-issue">文字なし</span></td>
+                        <td><a href="https://youtube.com/shorts/vP_VitRxucg?si=FcWWk7kaaLFKoWt6&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580008">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580009</td>
+                        <td>VI QUOC TUAN</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/db_Skg4OLfE?si=DgJ3cCG4jqQ7Mg8w&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580009">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580014</td>
+                        <td>VO TAN DAT</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/Citoy2kLgc0?si=LaSWDlTM2TbSTY6o&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580014">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580015</td>
+                        <td>VUONG THI TRA MY</td>
+                        <td><span class="status-badge status-issue">文字なし</span></td>
+                        <td><a href="https://youtube.com/shorts/aB-PLX0fQP0?si=41P8WH2pc9gDQIrw&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580015">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580019</td>
+                        <td>AYE THIRI MON</td>
+                        <td><span class="status-badge status-issue">BGMなし</span></td>
+                        <td><a href="https://youtube.com/shorts/62uuHgYuBLo?si=biMbncLNUDEunxz8&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580019">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580021</td>
+                        <td>KHANAL AMRIT</td>
+                        <td><span class="status-badge status-issue">文字なし</span></td>
+                        <td><a href="https://youtube.com/shorts/D9d5skNKC4A?si=t-GI9DU9r_HvHXGd&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580021">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580023</td>
+                        <td>KARKI DIPAK</td>
+                        <td><span class="status-badge status-private">動画非公開</span></td>
+                        <td><a href="https://youtube.com/shorts/dDN3Oq0M_Ys?si=3iFHbMgzRVQmpDRJ&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580023">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580024</td>
+                        <td>GHALE SUJATA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/7scRddPL4dA?si=Z8BNJETczsWyaW7K&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580024">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580025</td>
+                        <td>NGUYEN VAN DU</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580025">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580029</td>
+                        <td>NGUYEN THI NGOC LAN</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/_UhZRpNtx4M?si=JGJPMCJv1cZowjZr&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580029">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580032</td>
+                        <td>NGUYEN THI THUY</td>
+                        <td><span class="status-badge status-issue">文字なし</span></td>
+                        <td><a href="https://youtube.com/shorts/rMBzVrNC4T8?si=_vTUBMcesNRsQW19" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580032">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580038</td>
+                        <td>NGUYEN THE ANH</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580038">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580043</td>
+                        <td>GURUNG ABIN</td>
+                        <td><span class="status-badge status-issue">文字なし</span></td>
+                        <td><a href="https://youtube.com/shorts/IYjuFdMjBRw?si=jB0sTPgSqp9SZnK2&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580043">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580044</td>
+                        <td>GURUNG KRITI</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/DeZoaamSpfA?si=xlXZbUdw5rz8dqBV&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580044">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580046</td>
+                        <td>K C JUNU</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/kqs5jVFrfJQ?si=uKn4tsjCMKIkIUIr&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580046">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580047</td>
+                        <td>NG YIK PING</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/LlzA26Z097Y?si=gAL4ueHsQrnDQWXL&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580047">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580057</td>
+                        <td>SUESAT NAPHATHIDA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/zKwhNWgzDZQ?si=Od0riH4-kVL8i4l_&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580057">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580059</td>
+                        <td>SUN XINYING</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/0r3Agy7ByMo?si=vo44ruWnykMSpiIp&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580059">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580062</td>
+                        <td>DANYAL MUHAMMAD</td>
+                        <td><span class="status-badge status-issue">秒数足りない、文字なし、BGMなし、youtube非公開</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580062">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580064</td>
+                        <td>THAPA SUBIN</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/bDlOuUyTrF8?si=fFZzDKHaytKbPwdG" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580064">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580077</td>
+                        <td>TRINH THI PHUONG HONG</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://www.youtube.com/watch?v=oPQwdzn1LSk&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580077">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580078</td>
+                        <td>CHINTSOGT ERDENETULGA</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580078">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580085</td>
+                        <td>DOAN THI THUY VAN</td>
+                        <td><span class="status-badge status-private">動画非公開</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580085">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580086</td>
+                        <td>HTUN EAINDRAY KYAW</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://www.youtube.com/watch?v=SNc8VQGcByI&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580086">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580089</td>
+                        <td>HNIN YEE WIN</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://www.youtube.com/watch?v=EDPSnzGbVjU&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580089">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580093</td>
+                        <td>HA THI PHUONG</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/oY_JlRqZEew?si=LWDGNZCmU2n_oODP&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580093">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580096</td>
+                        <td>BANH KINH TRACH</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/0vfGhN0FcHs?si=Kx-TJ2pOwm_a5wka&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580096">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580098</td>
+                        <td>BISTA YASHODA KUMARI</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/uFeADB4Y-_U?feature=shared&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580098">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580108</td>
+                        <td>MASTIYAGE DONA ASHENI MALSHANI GUNATHILAKA</td>
+                        <td><span class="status-badge status-private">動画未公開</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580108">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580110</td>
+                        <td>MIN KHANT ZAW</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/NYkbVip3C70?si=hIE6MJ0EiQzzSgNr&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580110">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580112</td>
+                        <td>MAY MYINT MYAT KYAW</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/NDuDBF8kS5w?si=oDk39QFofIQQP13X&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580112">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580119</td>
+                        <td>LE THI THU QUYEN</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/yNl4QIR8YhA?si=V2ofXTcNPdU-JMXW&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580119">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580121</td>
+                        <td>LE NHU CANH</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/tzKyclQDFkE?si=x-cp6J7oCqFrvx8E&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580121">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580122</td>
+                        <td>LE THI THAO</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/qVYvcXKasFg?si=38bogwj7iKuetCSa&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580122">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- LSA-B -->
+        <div class="class-section">
+            <div class="class-title">LSA-B クラス</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>学籍番号</th>
+                        <th>学生名</th>
+                        <th>ステータス</th>
+                        <th>YouTubeリンク</th>
+                        <th>いいね</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2504580001</td>
+                        <td>AUNG HTET KO KO</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://www.youtube.com/watch?v=T4G1XddZs8k&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580001">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580003</td>
+                        <td>ADHIKARI KOIRALA ROSHANI</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580003">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580006</td>
+                        <td>ALAMIN MD</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/VcqZUW1ld5Y?feature=share&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580006">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580013</td>
+                        <td>UURIINTSOLMON BELGUTEI</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/RNqsH9--QFw?si=4WkxRIYXOH2E7MpG&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580013">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580020</td>
+                        <td>BEI YUANXIN</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580020">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580022</td>
+                        <td>KARKI ASMITA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/6jUOH9ExP-k?si=utLk6UPVvGzaqOUC&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580022">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580026</td>
+                        <td>NGUYEN KHAC DUONG</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://www.youtube.com/watch?v=AF1hzHmKecU&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580026">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580034</td>
+                        <td>NGUYEN THI MY LE</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/HtzcyRUz1hA?si=phtalWbcYIee9zx5&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580034">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580035</td>
+                        <td>NGUYEN THI MINH THU</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://www.youtube.com/watch?v=NKLmOsBBM9Y&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580035">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580039</td>
+                        <td>NGUYEN THUY LINH</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580039">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580040</td>
+                        <td>NGUYEN LAN HUONG</td>
+                        <td><span class="status-badge status-issue">文字なし</span></td>
+                        <td><a href="https://www.youtube.com/watch?v=iiwA6ySxm6E&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580040">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580041</td>
+                        <td>NGUYEN LONG NHAT</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/Z8HUXy4_c1g?si=JShoTxWLMkSwmXpE&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580041">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580042</td>
+                        <td>GURSED ANUUJIN</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/Q0nsEfsIcrs?si=H_SOs9kUzqTLgm7a&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580042">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580051</td>
+                        <td>JUE JUE NAINE</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/i2vcXELFWGA?feature=shared" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580051">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580054</td>
+                        <td>CHANG YAQI</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/5FIWTywz5iU?si=ffS0z4nuofMUitaQ&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580054">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580055</td>
+                        <td>ZIN ZIN AYE</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/lfmC48n3IAo?si=2mwy-Y3QUd0XkF-e&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580055">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580058</td>
+                        <td>SOE PYAE HAN</td>
+                        <td><span class="status-badge status-issue">文字なし</span></td>
+                        <td><a href="https://www.youtube.com/watch?v=NZoA9uBK6gc&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580058">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580060</td>
+                        <td>SUN JIANLIANG</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/KA1vHOGdPEc?si=ZZamu870IvCa1RVf&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580060">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580071</td>
+                        <td>TRAN BAO LONG</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/B3FLb48mamo?si=OppcWhurLoP429pJ&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580071">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580080</td>
+                        <td>THET HTOO SAN</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/oxi38_PaYo8?si=GHa6wkzSBtgi76CA&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580080">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580084</td>
+                        <td>DO THU GIANG</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/RmgtGPeVzkA?si=w9vD1TXJYz_YQ_70&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580084">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580087</td>
+                        <td>NAN DAYLI HLAING</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/L7P-TD8Of0c?si=4VtMCTwPyuft7TOa&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580087">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580088</td>
+                        <td>NI XIN</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580088">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580092</td>
+                        <td>NU WAR AUNG</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/y3g95mFPTv8?si=VwboHWS6h1ahKKkI&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580092">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580099</td>
+                        <td>BYAMBASUREN SUGAR</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580099">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580113</td>
+                        <td>RAJAGURU MUDIYANSELAGE IROSHAN ERANGA DISSANAYAKE</td>
+                        <td><span class="status-badge status-issue">文字なし</span></td>
+                        <td><a href="https://youtube.com/shorts/dlyhi2IZ_X4?si=ANigkjDSLbzGW0uf&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580113">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580117</td>
+                        <td>LI HONGREN</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580117">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- LSP -->
+        <div class="class-section">
+            <div class="class-title">LSP クラス</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>学籍番号</th>
+                        <th>学生名</th>
+                        <th>ステータス</th>
+                        <th>YouTubeリンク</th>
+                        <th>いいね</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2504580002</td>
+                        <td>ACHARYA ASHMA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/oWqJsGIDiqk?si=WUyK4RXZE9s5uNNE&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580002">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580004</td>
+                        <td>ADHIKARI SARISMA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/3FNib7vt3hE?si=qu72JUmOE6Gtuz-H&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580004">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580010</td>
+                        <td>WIJESINGHE DON THARINDU CHINTHAKA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/wdmM_UXQB4M?si=zj8b7ciH6S7xucRM&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580010">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580011</td>
+                        <td>WIJAYALATH PEDIGE SHERON DEVINDA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/UguBv3TArTc?si=k5UFzEbh7yRQbmSy&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580011">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580012</td>
+                        <td>WISMON ACHARIGE SENUKI DISANYA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/tU3_it2l0Es?si=jZEtCN1DzwbD2fRq&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580012">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580016</td>
+                        <td>UPADHYAY BARSHA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/3DmssU9M5QU?si=VV6wxtQVmDI3CH9S&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580016">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580017</td>
+                        <td>EAINT PHUU KABYAR</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://www.youtube.com/watch?v=SmqB629K0yk&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580017">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580027</td>
+                        <td>NGUYEN QUOC HUNG</td>
+                        <td><span class="status-badge status-private">動画未公開</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580027">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580028</td>
+                        <td>NGUYEN THI KIM THAO</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/N1J2TTnxd9Y?si=vXlnBguRIlgeNfgL&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580028">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580033</td>
+                        <td>NGUYEN THI HUYEN HAN</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/rpZoQDVrtM8?si=cjtN5s2iIcqdMNCs&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580033">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580037</td>
+                        <td>NGUYEN DINH HIEP</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580037">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580045</td>
+                        <td>KUNWAR DEEPA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/1RCyH9veY-8?si=bTBe6KFgqdMH0iKe&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580045">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580048</td>
+                        <td>SATKEEVA ALIIA OSMONOVNA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://www.youtube.com/watch?v=fmTdr3S5S7s&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580048">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580049</td>
+                        <td>SANDAR MOE</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580049">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580050</td>
+                        <td>SHARMA KHUM RAJ</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/UoYamue0wQY?si=Tho_wrWW8oXnJB9y&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580050">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580052</td>
+                        <td>SHRESTHA BIBISHA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/7Fbxj3_PWMs?si=7QKcmBj7wyqFsJX3&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580052">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580053</td>
+                        <td>SHUN LAE KO KO</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/BK3G-O5qUok?si=wgTMHt2VTaRq7gNe" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580053">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580056</td>
+                        <td>ZIN KYAW WIN</td>
+                        <td><span class="status-badge status-issue">©問題（保留）</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580056">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580061</td>
+                        <td>DHAKAL MANOJ</td>
+                        <td><span class="status-badge status-issue">文字なし、BGMなし</span></td>
+                        <td><a href="https://youtube.com/shorts/pmCw_a9xFW4?si=HCrtADqe3hinZ-Tu&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580061">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580063</td>
+                        <td>THAPA SAMJHANA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/g7JAcPTDlEE?si=9ePXPo5Mf4P5Ny6-&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580063">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580065</td>
+                        <td>THAPA SECHAN</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/vN7SEAzUFLo?si=dBxlhyZH0wyB_xhR&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580065">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580066</td>
+                        <td>DAHAL PARAS</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/c3pcWl3Ig7M?si=xvex0Sz7JNwoC3oq&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580066">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580067</td>
+                        <td>TAMANG ISMAILA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/k4gGZDi8BA0?si=Yx4YQXgu-zrMhh4z&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580067">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580068</td>
+                        <td>DAM THI MINH NGUYET</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/94fmFeK8Ma0?si=DhOAf9vAzQvL8wSp&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580068">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580069</td>
+                        <td>THARU ANJALI</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/tMeLRYRT9a8?si=0uq1nvnv81JvOEXS" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580069">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580070</td>
+                        <td>THARU SARITA DEVI</td>
+                        <td><span class="status-badge status-issue">文字なし</span></td>
+                        <td><a href="https://youtube.com/shorts/xVbmHpl9G7M?si=9ZiNWTYPDvRs-q4W&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580070">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580072</td>
+                        <td>TRAN LONG NHAT</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://www.youtube.com/watch?v=xqyAFVN1m08&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580072">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580073</td>
+                        <td>TRUONG VAN BAO</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/dsrcgFXGJnU?si=GJY0OReWQNyg7hha&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580073">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580074</td>
+                        <td>TRUONG TRAN QUYNH OANH</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/HvVgiVKSjbk?si=JKhVCeKPsPzRvE1Z&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580074">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580079</td>
+                        <td>DINH QUANG THANH</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/NIH6qCWnyG4?si=Ddz4X9JqmQ3lyZSR&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580079">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580082</td>
+                        <td>DEVKOTA ANIL</td>
+                        <td><span class="status-badge status-private">動画未公開</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580082">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580090</td>
+                        <td>HNIN YU NWE</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580090">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580091</td>
+                        <td>NEPAL GANGA</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/asY7KbpsMcM?si=DwOK-6wjWGEgjKwe&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580091">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580094</td>
+                        <td>HA NHAT DUY</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580094">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580095</td>
+                        <td>BATTULGA KHONGORZUL</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/wAzf9J42CKg?si=JhOpayIZYVUT10gP&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580095">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580097</td>
+                        <td>BHANDARI DENISHA</td>
+                        <td><span class="status-badge status-issue">文字なし</span></td>
+                        <td><a href="https://youtube.com/shorts/zO4iKCZEgtw?si=vg8ICEhNUee7KEs_&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580097">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580100</td>
+                        <td>PHAM HUU LUC</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/SUm9CHEysEg?si=-EonS-RVqr81j3bT&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580100">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580101</td>
+                        <td>PHAN THI BINH</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/5pHDjiEAkxc?si=JLZvbfABeK3KmQn9&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580101">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580102</td>
+                        <td>BUI QUANG HUY</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/zx-ZdamjqXQ?si=ulZoqmmFgj-HFC9r&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580102">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580103</td>
+                        <td>BUI NGOC SON</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580103">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580104</td>
+                        <td>BHULUN HARKA BAHADUR</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/EosgFtsnyyc?si=OuMa3ZeCGV--uuCq&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580104">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580105</td>
+                        <td>HOANG KIEU THU</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/X7f3HkdxHU8?si=SAYZuBp3CSKsPgox&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580105">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580106</td>
+                        <td>BODIYABADUGE NIMESH DILSHAN PERERA</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580106">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580107</td>
+                        <td>POKHREL YASHU</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/WastUd5ZBtY?si=YM9QEhkB69XLbt2u&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580107">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580109</td>
+                        <td>MAHATO MANISH</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/VyqJFI7RBhs?si=9NqOO8ajrJLH00Ha&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580109">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580111</td>
+                        <td>MUTHUKUMARANA NADEERA DESHAN</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580111">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580114</td>
+                        <td>RAHMAN NAYEMUR</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/WbvaE52QYPc?si=SSXKGW1_amWquGyX&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580114">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580115</td>
+                        <td>LAMA RENJEN</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/j6RsQQ7f9PQ?si=ksKcjXV6lu5BK4Q9&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580115">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580116</td>
+                        <td>RAMANAYAKA ARACHCHILAGE HASINI MADHUWANTHI</td>
+                        <td><span class="status-badge status-submitted">提出済</span></td>
+                        <td><a href="https://youtube.com/shorts/HFVTWDakbn0?si=Z2TTDAhRdAONxx_o&authuser=1" target="_blank">YouTubeを見る</a></td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580116">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>2504580123</td>
+                        <td>WATTORUTHANTHRIGE SUDATH RUMESH NIWARTHANA FERNANDO</td>
+                        <td><span class="status-badge status-not-submitted">未提出</span></td>
+                        <td class="no-link">-</td>
+                        <td class="like-cell">
+                            <button class="like-btn" data-student-id="2504580123">👍</button>
+                            <span class="like-count">0</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="reset-button">
+            <button onclick="clearLikes()">いいねをリセット</button>
+        </div>
+
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'studentLikes';
+        const LIKED_KEY = 'studentLiked';
+
+        function initializeLikes() {
+            const likes = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            const liked = JSON.parse(localStorage.getItem(LIKED_KEY)) || {};
+            
+            document.querySelectorAll('.like-btn').forEach(btn => {
+                const studentId = btn.getAttribute('data-student-id');
+                const likeCount = likes[studentId] || 0;
+                
+                const countSpan = btn.nextElementSibling;
+                countSpan.textContent = likeCount;
+                
+                if (liked[studentId]) {
+                    btn.disabled = true;
+                    btn.style.opacity = '0.5';
+                    btn.style.cursor = 'not-allowed';
+                }
+                
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    if (!liked[studentId]) {
+                        incrementLike(studentId, btn, countSpan, liked);
+                    }
+                });
+            });
+        }
+
+        function incrementLike(studentId, btn, countSpan, liked) {
+            const likes = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+            likes[studentId] = (likes[studentId] || 0) + 1;
+            
+            liked[studentId] = true;
+            
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(likes));
+            localStorage.setItem(LIKED_KEY, JSON.stringify(liked));
+            countSpan.textContent = likes[studentId];
+            
+            btn.classList.add('liked');
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+            
+            setTimeout(() => btn.classList.remove('liked'), 300);
+        }
+
+        function clearLikes() {
+            if (confirm('本当にいいねをリセットしますか？')) {
+                localStorage.removeItem('studentLikes');
+                localStorage.removeItem('studentLiked');
+                location.reload();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeLikes);
+    </script>
+</body>
+</html>
